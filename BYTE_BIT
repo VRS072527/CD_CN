@@ -1,0 +1,151 @@
+s=str(input())
+import re
+# Split using re.split
+l = re.split(r'[\n\s]+', s)
+ans="flag "
+for i in l:
+    if (i=="flag" or i=="ESC"):
+        ans=ans+"ESC "
+    ans+=i
+    ans+=" "
+ans+=" flag"
+print(ans)
+ans=ans[5:-5]
+k=ans.split(" ")
+dest=""
+esc=False
+for i in k:
+    if (i=="ESC" and esc==False):
+        esc=True
+    else:
+        if (((i=="flag" or i=="ESC") and esc==True) or (i!="flag" or i!="ESC")):
+            dest+=i
+            dest+=" "
+            esc=False
+print(dest)
+        
+
+
+
+BIT_STUFFING
+# cook your dish here
+s="abdcdbndg_jgksd"
+ss=""
+for i in range(len(s)):
+    ss=ss+str(bin(ord(s[i]))[2:])
+n=10
+j=0
+l=[]
+k=""
+for i in range(0,len(ss)):
+    if (j==n):
+        l.append(k)
+        j=0
+        k=""
+    k=k+ss[i]
+    j=j+1
+j=n-j
+while(j>0):
+    k=k+"0"
+    j=j-1
+l.append(k)
+print(l)
+bs=[]
+for i in range(len(l)):
+    p="01111110"
+    c=0
+    for j in range(10):
+        p=p+str(l[i][j])
+        if (l[i][j]=='1'):
+            c=c+1
+        else:
+            c=0
+        if (c==5):
+            p=p+('0')
+            c=0
+    p=p+"01111110"
+    bs.append(p)
+print("BIT STUFFING")
+print(bs)
+ds=[]
+for i in range(len(bs)):
+    t=""
+    o=bs[i]
+    o=o[8:]
+    o=o[::-1]
+    o=o[8:]
+    o=o[::-1]
+    d=0
+    for j in range(len(o)):
+        if(d==5):
+            d=0
+            continue
+        else:
+            if (o[j]=='1'):
+                d=d+1
+            else:
+                d=0
+        t=t+o[j]
+    ds.append(t)
+print("DE STUFFING")
+print(ds)# cook your dish here
+s="abdcdbndg_jgksd"
+ss=""
+for i in range(len(s)):
+    ss=ss+str(bin(ord(s[i]))[2:])
+n=10
+j=0
+l=[]
+k=""
+for i in range(0,len(ss)):
+    if (j==n):
+        l.append(k)
+        j=0
+        k=""
+    k=k+ss[i]
+    j=j+1
+j=n-j
+while(j>0):
+    k=k+"0"
+    j=j-1
+l.append(k)
+print(l)
+bs=[]
+for i in range(len(l)):
+    p="01111110"
+    c=0
+    for j in range(10):
+        p=p+str(l[i][j])
+        if (l[i][j]=='1'):
+            c=c+1
+        else:
+            c=0
+        if (c==5):
+            p=p+('0')
+            c=0
+    p=p+"01111110"
+    bs.append(p)
+print("BIT STUFFING")
+print(bs)
+ds=[]
+for i in range(len(bs)):
+    t=""
+    o=bs[i]
+    o=o[8:]
+    o=o[::-1]
+    o=o[8:]
+    o=o[::-1]
+    d=0
+    for j in range(len(o)):
+        if(d==5):
+            d=0
+            continue
+        else:
+            if (o[j]=='1'):
+                d=d+1
+            else:
+                d=0
+        t=t+o[j]
+    ds.append(t)
+print("DE STUFFING")
+print(ds)
