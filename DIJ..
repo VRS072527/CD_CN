@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+#include<string>
+
+using namespace std;
+
+int main() {
+    int n;
+    cout << "DIJKSTRA ALGORITHM SIMULATION\n";
+    cout << "Enter the no of nodes in the graph: ";
+    cin >> n;
+    vector < vector < long long int > > a(n, vector < long long int > (n, INT_MAX));
+    cout << "Enter the adjacency matrix of the graph(Enter -1 if no link exists):\n";
+    for (int i = 0; i < n; i++) {
+
+        for (int j = 0; j < n; j++) {
+            cin >> a[i][j];
+        }
+    }
+    for (int i = 0; i < n; i++) {
+
+        for (int j = 0; j < n; j++) {
+            //cout<<a[i][j]<<" ";
+            if (a[i][j] == -1) a[i][j] = INT_MAX;
+        }
+        //cout<<endl;
+    }
+    //vector < bool > st(false);
+    vector < long long int > dist(n, INT_MAX);
+    vector < string > path(n, "");
+    path[0] = "0";
+    dist[0] = 0;
+    priority_queue < pair < long long int, int > > pq;
+    pq.push(make_pair(0, 0));
+    while (!pq.empty()) {
+        int curr = pq.top().second;
+        pq.pop();
+        for (int i = 0; i < n; i++) {
+            if (dist[curr] + a[curr][i] < dist[i]) {
+                dist[i] = dist[curr] + a[curr][i];
+                //char cu = (char)(curr + 48);
+                char iu = (char)(i + 48);
+                string pa = "";
+                pa += "->";
+                pa += iu;
+                path[i] = path[curr] + pa;
+                pq.push(make_pair(dist[i], i));
+
+            }
+        }
+    }
+    cout << "Shortest Distance from 0th node (source):\n";
+    for (int i = 0; i < n; i++) {
+        printf("Distance to node-%d: %d", i, dist[i]);
+        cout << ", Path: " << path[i] << endl;
+    }
+    return 0;
+}
