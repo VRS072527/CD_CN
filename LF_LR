@@ -1,0 +1,86 @@
+# Function to eliminate left recursion
+def eliminate_left_recursion(productions):
+    new_productions = {}
+    for nt, rhs in productions.items():
+        alpha = []  # Productions with left recursion
+        beta = []   # Productions without left recursion
+        for production in rhs:
+            if production.startswith(nt):
+                alpha.append(production[len(nt):])
+            else:
+                if(production!=""):
+                    beta.append(production)
+       
+        if alpha:
+            # Create a new non-terminal
+            new_nt = nt + "'"
+            # Update productions for the original non-terminal
+            new_productions[nt] = [b + new_nt for b in beta]
+            # Add productions for the new non-terminal
+            new_productions[new_nt] = [a + new_nt for a in alpha] + ['∈']
+        else:
+            new_productions[nt] = rhs
+   
+    return new_productions
+
+
+# Function to find the longest common prefix (for left factoring)
+def longest_common_prefix(strings):
+    if not strings:
+        return ""
+   
+    prefix = strings[0]
+    for string in strings[1:]:
+        while not string.startswith(prefix):
+            prefix = prefix[:-1]
+            if not prefix:
+                return ""
+    return prefix
+
+# Function for left factoring
+def left_factoring(productions):
+    factored_productions = {}
+    for nt, rhs_list in productions.items():
+        common_prefix = longest_common_prefix(rhs_list)
+        if(len(rhs_list) == 1):
+            factored_productions[nt] = rhs_list
+            continue
+       
+        if common_prefix:
+            new_rhs = [rhs[len(common_prefix):] for rhs in rhs_list if rhs.startswith(common_prefix)]
+            new_nt = nt + "'"
+            factored_productions[nt] = [common_prefix + new_nt]
+            factored_productions[new_nt] = new_rhs + ['∈']
+        else:
+            factored_productions[nt] = rhs_list
+   
+    return factored_productions
+
+# Main Function
+def run_grammar_processing():
+    # Input grammar
+    n = int(input("Enter the number of lines in the grammar: "))
+    productions = {}
+    print("Enter the different lines of grammar:")
+    for _ in range(n):
+        line = input().strip()
+        lhs, rhs = line.split("-")
+        productions[lhs.strip()] = [x.strip() for x in rhs.split('|')]
+
+    # Step 1: Eliminate Left Recursion
+    productions = eliminate_left_recursion(productions)
+   
+    print("\nAfter left Recursion:")
+    for nt, rhs in productions.items():
+        print(f"{nt} -> {' | '.join(rhs)}")
+
+    # Step 2: Left Factoring
+    productions = left_factoring(productions)
+
+    # Display Final Grammar
+    print("\nFinal Grammar:")
+    for nt, rhs in productions.items():
+        print(f"{nt} -> {' | '.join(rhs)}")
+
+# Run the main function
+run_grammar_processing()
