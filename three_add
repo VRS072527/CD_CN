@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+string infixToPostfix(const std::string &expr) {
+    stack<char> operators;
+    string postfix;
+    for (int i=0;i<expr.size();i++){
+    char ch=expr[i];
+        if (isspace(ch)) continue;
+        if (isalnum(ch)) {
+            postfix += ch;
+        } else if (ch == '(') {
+            operators.push(ch);
+        } else if (ch == ')') {
+            while (!operators.empty() && operators.top() != '(') {
+                postfix += operators.top();
+                operators.pop();
+            }
+            operators.pop();
+        } else {
+            while (!operators.empty() && precedence(operators.top()) >= precedence(ch)) {
+                postfix += operators.top();
+                operators.pop();
+            }
+            operators.push(ch);
+        }
+    }
+    while (!operators.empty()) {
+        postfix += operators.top();
+        operators.pop();
+    }
+    return postfix;
+}
+
+string generateTemp(int &tc){
+ostringstream str1;
+str1<<tc;
+tc++;
+    return "T"+str1.str();
+   
+}
+
+void generateTAC(string expr){
+    stack<string> s;
+    vector<string> code;
+    int tc=1;
+    for(int i=0;i<expr.size();i++){
+        char ch = expr[i];
+        if (ch == '+' || ch == '-' || ch == '*' || ch == '/'){
+            string op1 = s.top();
+            s.pop();
+            string op2=s.top();
+            s.pop();
+            string temp = generateTemp(tc);
+            string ins = temp+" := "+op1+" "+ch+" "+op2;
+            code.push_back(ins);
+            s.push(temp);
+        }
+        else if(ch!=' '){
+            s.push(string(1,ch));
+        }
+    }
+    if(!s.empty()){
+        string res = s.top();
+        code.push_back("Result := "+res);
+    }
+    cout << "The intermediate code:\n";
+    for (int i=0;i<code.size();i++){
+    cout<<code[i]<<endl;
+    }
+}
+
+int main(){
+    string expr;
+    cout << "Enter the Expression: ";
+    cin>>expr;
+    reverse(expr.begin(),expr.end());
+    string pf = infixToPostfix(expr);
+    generateTAC(pf);
+    return 0;
+}
